@@ -1,5 +1,11 @@
 FROM php:8.0-apache
+RUN apt-get update && apt-get install -y \
+                libfreetype6-dev \
+                libjpeg62-turbo-dev \
+                libpng-dev \
+        && docker-php-ext-configure gd --with-freetype --with-jpeg \
+        && docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-install mysqli pdo && docker-php-ext-enable pdo_my>
 WORKDIR /home/ubuntu/phpcrud
-RUN apt install php8.0-mysql 
-COPY . .
+COPY . /var/www/html
 EXPOSE 80
